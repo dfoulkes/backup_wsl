@@ -72,8 +72,6 @@ fn export_wsl_distro() -> Result<PathBuf, Box<dyn Error>> {
     Ok(temp_tar_path)
 }
 
-
-//parallel split file
 fn split_file(file_path: &PathBuf, chunk_size: usize) -> io::Result<Vec<PathBuf>> {
     let mut file = File::open(file_path)?;
     let mut parts = Vec::new();
@@ -137,31 +135,6 @@ fn reassemble_compressed_blocks(compressed_files: Vec<PathBuf>, output_file_path
     Ok(())
 }
 
-// end new code
-fn compress_tar_file(temp_tar_path: PathBuf) -> Result<PathBuf, Box<dyn Error>> {
-    // Ensure the path is absolute and correctly formatted
-    let absolute_temp_tar_path = temp_tar_path.canonicalize()?;
-    let tar_gz_path = absolute_temp_tar_path.with_extension("tar.gz");
-
-    // Correctly format the command to avoid path and extension issues
-    let status = Command::new("7z")
-        .args(&[
-            "a",
-            "-ssw", // compress shared files
-            "-mx9", // maximum compression
-            "-mmt=20", // use 20 threads
-            "-tgzip", // use gzip format
-            tar_gz_path.to_str().unwrap(), // Ensure the path is correctly passed as a string
-            absolute_temp_tar_path.to_str().unwrap(),
-        ])
-        .status()?;
-
-    if !status.success() {
-        return Err(Box::new(std::io::Error::new(std::io::ErrorKind::Other, "7z command failed")));
-    }
-
-    Ok(tar_gz_path)
-}
 fn move_tar_gz_file(tar_gz_path: &PathBuf) -> Result<(), Box<dyn Error>> {
     let final_path = PathBuf::from("P:\\wsl\\backup\\ubuntu.tar.gz");
     let reference_for_later_delete = tar_gz_path.clone();
