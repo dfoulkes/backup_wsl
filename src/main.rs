@@ -14,13 +14,13 @@ use indicatif::{ProgressBar, ProgressStyle};
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
 struct Args {
-    #[clap(short, long, about = "The size of each chunks in MB", default_value = 100)]
+    #[clap(short, long, help = "The size of each chunks in MB", default_value = "100")]
     chunk_size: Option<usize>,
-    #[clap(short, long, about = "The maximum number of threads to use", default_value = 28)]
+    #[clap(short, long, help = "The maximum number of threads to use", default_value = "28")]
     max_threads: Option<usize>,
-    #[clap(short, long, about = "distro name", default_value = "Ubuntu")]
+    #[clap(short, long, help = "distro name", default_value = "Ubuntu")]
     distro_name: Option<String>,
-    #[clap(short, long, about = "directory to store the final .tar.gz file",
+    #[clap(short, long, help = "directory to store the final .tar.gz file",
         default_value = "P:\\wsl\\backup")]
     final_location_path: Option<String>,
 }
