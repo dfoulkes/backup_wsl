@@ -10,6 +10,7 @@ use std::{env};
 use std::fs::{self, File};
 use std::sync::mpsc::channel;
 use indicatif::{ProgressBar, ProgressStyle};
+use num_cpus::get;
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
@@ -36,7 +37,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // these specs run at roughly 3.2GB worth of memory whilst compressing
     let chunk_size = 100 * 1024 * 1024; // 100MB
     // I know it's hard coded, optimised for my AMD Ryzen 9 7950X3D with a few threads to spare
-    let max_threads = 28;
+    //let max_threads = 28;
+
+    // replaced with the use of num_cpus crate to get the number of threads available.
+    let max_threads = get();
 
     update_progress_bar_message(&pb, "Backing up WSL distro 📦");
     pb.inc(1);
